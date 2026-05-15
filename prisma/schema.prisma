@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  wallet    String   @unique
+  createdAt DateTime @default(now())
+  watchlist WhaleWallet[]
+}
+
+model WhaleWallet {
+  id        String   @id @default(cuid())
+  address   String   @unique
+  label     String
+  chain     String
+  score     Float
+  ownerId   String?
+  owner     User?    @relation(fields: [ownerId], references: [id])
+  events    WhaleEvent[]
+}
+
+model WhaleEvent {
+  id          String   @id @default(cuid())
+  whaleId     String
+  whale       WhaleWallet @relation(fields: [whaleId], references: [id])
+  eventType   String
+  token       String
+  amountUsd   Float
+  txHash      String   @unique
+  occurredAt  DateTime
+}
+
+model Approval {
+  id          String   @id @default(cuid())
+  wallet      String
+  chain       String
+  token       String
+  spender     String
+  allowance   String
+  risk        String
+  revokeReady Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
