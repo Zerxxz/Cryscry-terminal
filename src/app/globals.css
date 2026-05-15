@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-background text-foreground min-h-screen bg-blur-gradient bg-fixed;
+}
+
+* {
+  @apply border-white/10;
+}
